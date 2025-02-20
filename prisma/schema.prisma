@@ -3,17 +3,111 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  email       String   @unique
-  firstName   String?
-  lastName    String?
-  imageUrl    String?
-  clerkUserId String   @unique
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                String       @id @default(cuid())
+  username          String       @unique
+  // optional fields
+  firstName         String?
+  lastName          String?
+  imageUrl          String?
+  clerkUserId       String?      @unique
+  // timestamps
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  // relations
+  payments          Payment[]    @relation("UserPayments")
+  settlementsPaidTo Settlement[] @relation("PaidToSettlements")
+  settlementsPaidBy Settlement[] @relation("PaidBySettlements")
+  splits            Split[]      @relation("UserSplits")
+  friendOf          UserFriend[] @relation("UserFriendsOf")
+  friends           UserFriend[] @relation("UserFriends")
+  groups            UserGroup[]
+}
+
+model Group {
+  id          String       @id @default(cuid())
+  name        String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  expenses    Expense[]    @relation("GroupExpenses")
+  settlements Settlement[]
+  members     UserGroup[]
+}
+
+model UserGroup {
+  id        String   @id @default(cuid())
+  userId    String
+  groupId   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, groupId])
+}
+
+model UserFriend {
+  id        String   @id @default(cuid())
+  userId    String
+  friendId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  friend    User     @relation("UserFriendsOf", fields: [friendId], references: [id], onDelete: Cascade)
+  user      User     @relation("UserFriends", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, friendId])
+}
+
+model Expense {
+  id          String    @id @default(cuid())
+  description String
+  amount      Float
+  date        DateTime
+  groupId     String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  group       Group     @relation("GroupExpenses", fields: [groupId], references: [id], onDelete: Cascade)
+  payments    Payment[] @relation("ExpensePayments")
+  splits      Split[]   @relation("ExpenseSplits")
+}
+
+model Split {
+  id          String       @id @default(cuid())
+  amount      Float
+  expenseId   String
+  userId      String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  user        User         @relation("UserSplits", fields: [userId], references: [id], onDelete: Cascade)
+  expense     Expense      @relation("ExpenseSplits", fields: [expenseId], references: [id], onDelete: Cascade)
+  settlements Settlement[] @relation("SettlementSplits")
+}
+
+model Payment {
+  id        String   @id @default(cuid())
+  amount    Float
+  paidById  String
+  expenseId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  expense   Expense  @relation("ExpensePayments", fields: [expenseId], references: [id], onDelete: Cascade)
+  paidBy    User     @relation("UserPayments", fields: [paidById], references: [id], onDelete: Cascade)
+}
+
+model Settlement {
+  id        String   @id @default(cuid())
+  amount    Float
+  paidById  String
+  paidToId  String
+  groupId   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  paidTo    User     @relation("PaidToSettlements", fields: [paidToId], references: [id], onDelete: Cascade)
+  paidBy    User     @relation("PaidBySettlements", fields: [paidById], references: [id], onDelete: Cascade)
+  splits    Split[]  @relation("SettlementSplits")
 }
