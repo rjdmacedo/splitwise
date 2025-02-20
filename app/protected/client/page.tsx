@@ -10,10 +10,10 @@ export default function Page() {
   }
 
   return (
-    <section className='py-24'>
-      <div className='container'>
-        <h1 className='text-3xl font-bold'>This is a client-side page</h1>
-        <p className='mt-4'>You are logged in as {user?.firstName}</p>
+    <section className="py-24">
+      <div className="container">
+        <h1 className="text-3xl font-bold">This is a client-side page</h1>
+        <p className="mt-4">You are logged in as {user?.firstName}</p>
       </div>
     </section>
   )

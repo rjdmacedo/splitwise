@@ -1,7 +1,7 @@
 import { Webhook } from 'svix'
 import { headers } from 'next/headers'
 import { WebhookEvent } from '@clerk/nextjs/server'
-import { createUser } from '@/lib/users'
+import { createUser, getUserById, updateUser } from '@/lib/users'
 import { User } from '@prisma/client'
 
 export async function POST(req: Request) {
@@ -51,24 +51,56 @@ export async function POST(req: Request) {
 
   const eventType = evt.type
 
-  if (eventType === 'user.created') {
-    const { id, username, first_name, last_name, image_url } = evt.data
+  switch (eventType) {
+    case 'user.created': {
+      const { id, username, first_name, last_name, image_url } = evt.data
 
-    if (!id || !username) {
-      return new Response('Error occurred -- missing data', {
-        status: 400
-      })
+      if (!id || !username) {
+        return new Response('Error occurred -- missing data', {
+          status: 400
+        })
+      }
+
+      const data = {
+        username,
+        clerkUserId: id,
+        ...(first_name ? { firstName: first_name } : {}),
+        ...(last_name ? { lastName: last_name } : {}),
+        ...(image_url ? { imageUrl: image_url } : {})
+      } as User
+
+      await createUser(data)
+      break
     }
+    case 'user.updated': {
+      const { id, username, first_name, last_name, image_url } = evt.data
 
-    const user = {
-      username,
-      clerkUserId: id,
-      ...(first_name ? { firstName: first_name } : {}),
-      ...(last_name ? { lastName: last_name } : {}),
-      ...(image_url ? { imageUrl: image_url } : {})
-    } as User
+      if (!id || !username) {
+        return new Response('Error occurred -- missing data', {
+          status: 400
+        })
+      }
 
-    await createUser(user)
+      const data = {
+        username,
+        ...(first_name ? { firstName: first_name } : {}),
+        ...(last_name ? { lastName: last_name } : {}),
+        ...(image_url ? { imageUrl: image_url } : {})
+      } as User
+
+      const { user } = await getUserById({ clerkUserId: id })
+
+      if (!user) {
+        return new Response('Error occurred -- user not found', {
+          status: 404
+        })
+      }
+
+      await updateUser(user.id, data)
+      break
+    }
+    default:
+      break
   }
 
   return new Response('', { status: 200 })

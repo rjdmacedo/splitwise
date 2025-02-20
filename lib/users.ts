@@ -19,6 +19,7 @@ export async function getUserById({
 }) {
   try {
     if (!id && !clerkUserId) {
+      // noinspection ExceptionCaughtLocallyJS
       throw new Error('id or clerkUserId is required')
     }
 
@@ -27,11 +28,11 @@ export async function getUserById({
     const user = await prisma.user.findUnique({ where: query })
     return { user }
   } catch (error) {
-    return { error }
+    throw error
   }
 }
 
-export async function UpdateUser(id: string, data: Partial<User>) {
+export async function updateUser(id: string, data: Partial<User>) {
   try {
     const user = await prisma.user.update({
       where: { id },

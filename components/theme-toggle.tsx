@@ -1,14 +1,14 @@
 'use client'
 
-import { Moon, Sun } from 'lucide-react'
+import { Laptop, Moon, Sun, SunMoon } from 'lucide-react'
 import { useTheme } from 'next-themes'
 
-import { Button } from '@/components/ui/button'
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuPortal,
+  DropdownMenuCheckboxItem
 } from '@/components/ui/dropdown-menu'
 
 import useMounted from '@/hooks/use-mounted'
@@ -20,29 +20,36 @@ export function ThemeToggle() {
   if (!mounted) return null
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant='ghost' size='icon'>
-          {resolvedTheme === 'dark' ? (
-            <Sun className='h-5 w-5 text-orange-300' />
-          ) : (
-            <Moon className='h-5 w-5' />
-          )}
-
-          <span className='sr-only'>Toggle theme</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align='end'>
-        <DropdownMenuItem onClick={() => setTheme('light')}>
-          Light
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('dark')}>
-          Dark
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('system')}>
-          System
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <DropdownMenuSub>
+      <DropdownMenuSubTrigger>
+        <SunMoon />
+        Theme
+      </DropdownMenuSubTrigger>
+      <DropdownMenuPortal>
+        <DropdownMenuSubContent>
+          <DropdownMenuCheckboxItem
+            checked={resolvedTheme === 'light'}
+            onClick={() => setTheme('light')}
+          >
+            <Sun />
+            Light
+          </DropdownMenuCheckboxItem>
+          <DropdownMenuCheckboxItem
+            checked={resolvedTheme === 'dark'}
+            onClick={() => setTheme('dark')}
+          >
+            <Moon />
+            Dark
+          </DropdownMenuCheckboxItem>
+          <DropdownMenuCheckboxItem
+            checked={resolvedTheme === 'system'}
+            onClick={() => setTheme('system')}
+          >
+            <Laptop />
+            System
+          </DropdownMenuCheckboxItem>
+        </DropdownMenuSubContent>
+      </DropdownMenuPortal>
+    </DropdownMenuSub>
   )
 }
