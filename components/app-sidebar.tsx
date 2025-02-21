@@ -28,6 +28,8 @@ import {
   SidebarMenuItem
 } from '@/components/ui/sidebar'
 import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+import { AddExpenseButton } from '@/components/add-expense-button'
 
 const data = {
   navMain: [
@@ -169,6 +171,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
+        <AddExpenseButton />
+        <Button size="sm" variant="secondary">
+          Settle up
+        </Button>
         <NavMain items={data.navMain} />
         <NavProjects projects={data.projects} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />

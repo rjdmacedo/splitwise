@@ -8,13 +8,12 @@ datasource db {
 }
 
 model User {
-  id                String       @id @default(cuid())
+  id                String       @id
   username          String       @unique
   // optional fields
   firstName         String?
   lastName          String?
   imageUrl          String?
-  clerkUserId       String?      @unique
   // timestamps
   createdAt         DateTime     @default(now())
   updatedAt         DateTime     @updatedAt

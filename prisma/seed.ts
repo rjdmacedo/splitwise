@@ -9,10 +9,10 @@ async function seed() {
   // Create users
   const rafael = await prisma.user.create({
     data: {
+      id: 'user_2tJjdX2yYyKBI6cfEXzqlwtbStB',
       firstName: 'Rafael',
       lastName: 'Macedo',
       username: 'rafael-macedo',
-      clerkUserId: 'user_2tJjdX2yYyKBI6cfEXzqlwtbStB',
       imageUrl:
         'https://img.clerk.com/eyJ0eXBlIjoiZGVmYXVsdCIsImlpZCI6Imluc18ydEdrTnRLQWV0MkNtSDNreUhWRjM3eThQOFQiLCJyaWQiOiJ1c2VyXzJ0SmpkWDJ5WXlLQkk2Y2ZFWHpxbHd0YlN0QiIsImluaXRpYWxzIjoiUk0ifQ'
     }
@@ -20,10 +20,10 @@ async function seed() {
 
   const ana = await prisma.user.create({
     data: {
+      id: 'user_2tKA85WOvcNQF4OC39xqBFb2LIc',
       firstName: 'Ana',
       lastName: 'Ferreira',
       username: 'ana-ferreira',
-      clerkUserId: 'user_2tKA85WOvcNQF4OC39xqBFb2LIc',
       imageUrl:
         'https://img.clerk.com/eyJ0eXBlIjoiZGVmYXVsdCIsImlpZCI6Imluc18ydEdrTnRLQWV0MkNtSDNreUhWRjM3eThQOFQiLCJyaWQiOiJ1c2VyXzJ0S0E4NVdPdmNOUUY0T0MzOXhxQkZiMkxJYyJ9'
     }
@@ -31,10 +31,10 @@ async function seed() {
 
   const john = await prisma.user.create({
     data: {
+      id: 'user_2tKBgvkttuzeQwW8GKXPlOwmFrH',
       firstName: 'John',
       lastName: 'Doe',
       username: 'john-doe',
-      clerkUserId: 'user_2tKBgvkttuzeQwW8GKXPlOwmFrH',
       imageUrl:
         'https://img.clerk.com/eyJ0eXBlIjoiZGVmYXVsdCIsImlpZCI6Imluc18ydEdrTnRLQWV0MkNtSDNreUhWRjM3eThQOFQiLCJyaWQiOiJ1c2VyXzJ0S0Jndmt0dHV6ZVF3VzhHS1hQbE93bUZySCIsImluaXRpYWxzIjoiSkQifQ'
     }
@@ -42,10 +42,10 @@ async function seed() {
 
   const jane = await prisma.user.create({
     data: {
+      id: 'user_2tKB93AIiIi0OOKK1Mw3UXm3cBS',
       firstName: 'Jane',
       lastName: 'Doe',
       username: 'jane-doe',
-      clerkUserId: 'user_2tKB93AIiIi0OOKK1Mw3UXm3cBS',
       imageUrl:
         'https://img.clerk.com/eyJ0eXBlIjoiZGVmYXVsdCIsImlpZCI6Imluc18ydEdrTnRLQWV0MkNtSDNreUhWRjM3eThQOFQiLCJyaWQiOiJ1c2VyXzJ0S0I5M0FJaUlpME9PS0sxTXczVVhtM2NCUyIsImluaXRpYWxzIjoiSkQifQ'
     }

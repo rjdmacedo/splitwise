@@ -10,22 +10,14 @@ export async function createUser(data: User) {
   }
 }
 
-export async function getUserById({
-  id,
-  clerkUserId
-}: {
-  id?: string
-  clerkUserId?: string
-}) {
+export async function getUserById({ id }: { id?: string }) {
   try {
-    if (!id && !clerkUserId) {
+    if (!id) {
       // noinspection ExceptionCaughtLocallyJS
-      throw new Error('id or clerkUserId is required')
+      throw new Error('id is required')
     }
 
-    const query = id ? { id } : { clerkUserId }
-
-    const user = await prisma.user.findUnique({ where: query })
+    const user = await prisma.user.findUnique({ where: { id } })
     return { user }
   } catch (error) {
     throw error

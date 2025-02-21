@@ -62,8 +62,8 @@ export async function POST(req: Request) {
       }
 
       const data = {
+        id,
         username,
-        clerkUserId: id,
         ...(first_name ? { firstName: first_name } : {}),
         ...(last_name ? { lastName: last_name } : {}),
         ...(image_url ? { imageUrl: image_url } : {})
@@ -88,7 +88,7 @@ export async function POST(req: Request) {
         ...(image_url ? { imageUrl: image_url } : {})
       } as User
 
-      const { user } = await getUserById({ clerkUserId: id })
+      const { user } = await getUserById({ id })
 
       if (!user) {
         return new Response('Error occurred -- user not found', {
